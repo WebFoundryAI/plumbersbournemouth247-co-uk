@@ -1397,6 +1397,55 @@ After the emergency, we advise on cleaning procedures and necessary repairs to p
 For sewage emergency services in Wroughton, contact Blocked Drains Swindon immediately at 01793487489. We're available 24/7.`,
 };
 
+// ===== ABOUT PAGE =====
+export const ABOUT_CONTENT = `Block Drains Swindon is a professional drainage company dedicated to serving residents and businesses across Swindon and the surrounding areas. Our team of experienced engineers specialises in resolving all types of drainage issues, from simple blockages to complex repairs and installations.
+
+We understand that drainage problems can occur at any time, often without warning. That is why we offer a rapid response service, available around the clock, to ensure you receive the help you need when you need it most. Our commitment to reliability means you can count on us to arrive promptly and equipped with the tools and expertise to address your drainage concerns efficiently.
+
+At Block Drains Swindon, we pride ourselves on transparency and honesty. We provide clear, upfront pricing with no hidden charges, so you know exactly what to expect before any work begins. Our engineers take the time to explain the issue and the recommended solution, empowering you to make informed decisions about your property.
+
+Our services cover a comprehensive range of drainage needs, including drain unblocking, CCTV drain surveys, high-pressure jetting, drain repairs, and emergency callouts. Whether you are dealing with a blocked sink, a damaged pipe, or a more serious drainage emergency, we have the skills and equipment to restore your system to full working order.
+
+We are proud to serve Swindon and its surrounding communities, including Cricklade, Highworth, Purton, Royal Wootton Bassett, and Wroughton. Our local knowledge allows us to respond quickly and understand the specific drainage challenges that properties in this region may face.
+
+When you choose Block Drains Swindon, you choose a team that values quality workmanship, customer satisfaction, and integrity. We are fully insured and committed to delivering a service that meets the highest standards. If you are experiencing drainage issues, do not hesitate to get in touch. Our friendly team is ready to assist you.`;
+
+// ===== AI-GENERATED FAQS =====
+export const AI_GENERATED_FAQS = [
+  {
+    question: "How quickly can you respond to an emergency callout?",
+    answer: "We aim to respond to emergency drainage callouts within one to two hours across Swindon and the surrounding areas. Our team operates around the clock, so help is available whenever you need it, day or night."
+  },
+  {
+    question: "Do you charge a call-out fee?",
+    answer: "No, we do not charge a call-out fee. You only pay for the work that is carried out. We provide a clear quote before starting any job, so there are no unexpected costs."
+  },
+  {
+    question: "What areas do you cover?",
+    answer: "We provide drainage services throughout Swindon and the surrounding areas, including Cricklade, Highworth, Purton, Royal Wootton Bassett, and Wroughton. If you are unsure whether we cover your location, please get in touch."
+  },
+  {
+    question: "What payment methods do you accept?",
+    answer: "We accept cash, debit and credit card payments, and bank transfers. Payment is typically collected upon completion of the work."
+  },
+  {
+    question: "Can you help with commercial drainage problems?",
+    answer: "Yes, we offer drainage services for both residential and commercial properties. Whether you manage a shop, office, restaurant, or industrial premises, we can assist with blockages, repairs, and maintenance."
+  },
+  {
+    question: "What is a CCTV drain survey and when is it needed?",
+    answer: "A CCTV drain survey uses a small camera to inspect the inside of your drainage pipes. It is useful for diagnosing recurring blockages, identifying damage or cracks, and providing a clear picture of the condition of your drains before purchasing a property."
+  },
+  {
+    question: "How can I prevent blocked drains?",
+    answer: "Avoid pouring cooking oils and fats down the sink, use drain guards to catch hair and debris, and dispose of items like wet wipes and sanitary products in the bin rather than flushing them. Regular maintenance can also help keep your drains clear."
+  },
+  {
+    question: "Are your engineers qualified and insured?",
+    answer: "Yes, all our engineers are fully trained and experienced in drainage work. We are also fully insured, giving you peace of mind that your property is protected while we carry out the work."
+  }
+];
+
 /**
  * Get static content by key.
  * Returns undefined if content not found.

@@ -3,8 +3,9 @@ import { CTASection } from "@/components/sections/CTASection";
 import { RouteSEOHead } from "@/components/seo/RouteSEOHead";
 import { SchemaScript } from "@/components/seo/SchemaScript";
 import { BRAND } from "@/config/brand";
+import { ABOUT_CONTENT } from "@/config/staticContent";
 import { generateOrganizationSchema, generateBreadcrumbSchema } from "@/lib/schema";
-import { CheckCircle2, Users, Clock, Shield } from "lucide-react";
+import { Users, Clock, Shield } from "lucide-react";
 
 const About = () => {
   return (
@@ -32,12 +33,11 @@ const About = () => {
         <div className="container-narrow px-4">
           <div className="prose prose-lg max-w-none">
             <h2 className="text-2xl font-bold mb-4">Trusted Drainage Specialists in {BRAND.serviceAreaLabel}</h2>
-            <p className="text-muted-foreground mb-6">
-              {BRAND.brandName} is a professional drainage company serving {BRAND.serviceAreaLabel}. With years of experience in the industry, we've built a reputation for fast, reliable service at fair prices.
-            </p>
-            <p className="text-muted-foreground mb-6">
-              Our team of fully trained and insured engineers use the latest equipment and techniques to tackle any drainage problem, from simple blockages to complex repairs. We pride ourselves on our honest, transparent approach – no hidden fees, no call-out charges, just quality workmanship you can trust.
-            </p>
+            {ABOUT_CONTENT.split('\n\n').map((paragraph, index) => (
+              <p key={index} className="text-muted-foreground mb-6">
+                {paragraph}
+              </p>
+            ))}
           </div>
 
           <div className="grid sm:grid-cols-3 gap-6 mt-12">
@@ -62,24 +62,6 @@ const About = () => {
                 Complete peace of mind guaranteed
               </p>
             </div>
-          </div>
-
-          <div className="mt-12">
-            <h2 className="text-2xl font-bold mb-6">Our Customer Service Guarantee</h2>
-            <ul className="space-y-4">
-              {[
-                "No call-out fee – you only pay for work completed",
-                "Fixed pricing – the quote we give is the price you pay",
-                "Fast response – typically within 1-2 hours for emergencies",
-                "Quality workmanship – all work guaranteed",
-                "Honest advice – we'll always give you our professional opinion",
-              ].map((item, i) => (
-                <li key={i} className="flex items-start gap-3">
-                  <CheckCircle2 className="h-5 w-5 text-trust shrink-0 mt-0.5" />
-                  <span>{item}</span>
-                </li>
-              ))}
-            </ul>
           </div>
         </div>
       </section>
