@@ -87,17 +87,11 @@ const Terms = () => {
             <h2>9. Complaints</h2>
             <p>
               We take complaints seriously. Please contact us at{" "}
-              <a
-                href={`mailto:${BRAND.email}`}
-                className="text-primary hover:underline"
-              >
+              <a href={`mailto:${BRAND.email}`}>
                 {BRAND.email}
               </a>{" "}
               or call{" "}
-              <a
-                href={`tel:${BRAND.phone}`}
-                className="text-primary hover:underline"
-              >
+              <a href={`tel:${BRAND.phone}`}>
                 {BRAND.phone}
               </a>{" "}
               with any concerns.

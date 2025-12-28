@@ -36,7 +36,7 @@ export function CookieBanner() {
           <p className="text-sm text-muted-foreground">
             We use cookies to improve your experience. By continuing to use our
             site, you accept our{" "}
-            <Link to="/cookies" className="text-primary hover:underline">
+            <Link to="/cookies" className="text-primary underline decoration-primary/40 underline-offset-2 hover:decoration-primary">
               cookie policy
             </Link>
             .

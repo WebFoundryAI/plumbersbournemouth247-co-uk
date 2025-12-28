@@ -88,10 +88,7 @@ const Cookies = () => {
             <h2>Contact Us</h2>
             <p>
               For questions about our cookie policy, contact us at:{" "}
-              <a
-                href={`mailto:${BRAND.email}`}
-                className="text-primary hover:underline"
-              >
+              <a href={`mailto:${BRAND.email}`}>
                 {BRAND.email}
               </a>
             </p>

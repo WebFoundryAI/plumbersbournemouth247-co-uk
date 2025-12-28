@@ -78,7 +78,7 @@ const Privacy = () => {
             <h2>6. Cookies</h2>
             <p>
               Our website uses cookies to improve your experience. See our{" "}
-              <a href="/cookies" className="text-primary hover:underline">
+              <a href="/cookies">
                 Cookie Policy
               </a>{" "}
               for more details.
@@ -87,10 +87,7 @@ const Privacy = () => {
             <h2>7. Contact Us</h2>
             <p>
               For privacy-related enquiries, contact us at:{" "}
-              <a
-                href={`mailto:${BRAND.email}`}
-                className="text-primary hover:underline"
-              >
+              <a href={`mailto:${BRAND.email}`}>
                 {BRAND.email}
               </a>
             </p>

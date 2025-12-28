@@ -124,6 +124,45 @@
   h1, h2, h3, h4, h5, h6 {
     @apply font-heading font-bold tracking-tight;
   }
+
+  /* WCAG 2.1 AA compliant links - distinguishable without color alone */
+  /* Inline text links get underline by default */
+  a {
+    @apply transition-colors duration-200;
+  }
+
+  /* Focus states for keyboard navigation - visible focus ring */
+  a:focus-visible {
+    @apply outline-none ring-2 ring-ring ring-offset-2 ring-offset-background rounded-sm;
+  }
+
+  /* Body text links - underlined for accessibility */
+  p a,
+  li a,
+  td a,
+  dd a,
+  article a,
+  .prose a {
+    @apply text-primary underline decoration-primary/40 underline-offset-2;
+  }
+
+  p a:hover,
+  li a:hover,
+  td a:hover,
+  dd a:hover,
+  article a:hover,
+  .prose a:hover {
+    @apply decoration-primary text-primary/80;
+  }
+
+  p a:focus-visible,
+  li a:focus-visible,
+  td a:focus-visible,
+  dd a:focus-visible,
+  article a:focus-visible,
+  .prose a:focus-visible {
+    @apply decoration-primary;
+  }
 }
 
 @layer components {
