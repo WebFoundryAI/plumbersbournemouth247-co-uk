@@ -4,6 +4,7 @@ import { BRAND } from '../../../data/brand';
 import { LOCATIONS, getLocationBySlug } from '../../../data/locations';
 import { SERVICES, getServiceBySlug } from '../../../data/services';
 import { getLocationServicePageSchema, getBreadcrumbSchema } from '../../../utils/schema';
+import { getLocationServiceContent, getLocationData } from '../../../data/locationServiceContent';
 
 export function getStaticPaths() {
   const paths = [];
@@ -25,21 +26,26 @@ if (!location || !service) {
   return Astro.redirect('/locations');
 }
 
+// Get location-specific content
+const serviceContent = getLocationServiceContent(locationSlug, serviceSlug);
+const locationData = getLocationData(locationSlug);
+
 // SEO-optimized title (50-60 chars) - unique per location+service combo
-const title = `${service.name} in ${location.name} | Fast Local Service`;
+const title = `${service.name} in ${location.name} | 24/7 Emergency Service`;
 
 // SEO-optimized description (120-155 chars) with benefits and CTA
-const description = `Expert ${service.name.toLowerCase()} in ${location.name}. No call-out fee, fixed pricing, 24/7 availability. Local engineers ready now. Call ${BRAND.phoneFormatted}.`;
+const description = `Expert ${service.name.toLowerCase()} in ${location.name}. No call-out fee, fixed pricing, 24/7 availability. Local engineers respond ${locationData?.responseTime || 'fast'}. Call ${BRAND.phoneFormatted}.`;
 
-const otherServices = SERVICES.filter((s) => s.slug !== service.slug).slice(0, 3);
-const nearbyLocations = LOCATIONS.filter((l) => l.slug !== location.slug).slice(0, 3);
+const otherServices = SERVICES.filter((s) => s.slug !== service.slug);
+const nearbyLocations = LOCATIONS.filter((l) => l.slug !== location.slug).slice(0, 4);
 
 const benefits = [
-  `Local engineers covering ${location.name}`,
-  "No call-out charges",
+  `Local engineers covering ${location.name} and surrounding areas`,
+  "No call-out charges - ever",
   "Fixed pricing with no hidden fees",
   "24/7 emergency availability",
-  "Fully trained and insured",
+  "Fully trained, insured, and DBS checked",
+  "Guaranteed satisfaction on all work",
 ];
 
 // Generate location + service specific schema
@@ -50,14 +56,19 @@ const breadcrumbSchema = getBreadcrumbSchema([
   { name: location.name, url: `/locations/${location.slug}` },
   { name: service.name, url: `/locations/${location.slug}/${service.slug}` }
 ]);
+
+// Get neighborhoods to display
+const displayNeighborhoods = locationData?.neighborhoods?.slice(0, 6) || [];
+const displayLandmarks = locationData?.landmarks?.slice(0, 3) || [];
 ---
 
 <BaseLayout title={title} description={description} canonical={`/locations/${location.slug}/${service.slug}`} schema={pageSchema}>
   <!-- BreadcrumbList Schema -->
   <script type="application/ld+json" set:html={JSON.stringify(breadcrumbSchema)} />
+
   <!-- Hero Section -->
   <section class="hero-section">
-    <div class="hero-overlay py-16 md:py-20">
+    <div class="hero-overlay py-16 md:py-24">
       <div class="container-wide px-4">
         <a href={`/locations/${location.slug}`} class="inline-flex items-center gap-2 text-white/90 hover:text-white mb-6 transition-colors">
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
@@ -68,9 +79,19 @@ const breadcrumbSchema = getBreadcrumbSchema([
           <h1 class="text-4xl md:text-5xl font-bold mb-4">
             {service.name} in {location.name}
           </h1>
-          <p class="text-lg text-white/90 max-w-2xl">
-            Professional {service.name.toLowerCase()} services in {location.name}, {location.countyOrRegion}. Available 24/7.
+          <p class="text-lg md:text-xl text-white/90 max-w-3xl">
+            Professional {service.name.toLowerCase()} services throughout {location.name} and {location.countyOrRegion}.
+            Our local engineers respond {locationData?.responseTime || 'rapidly'} - available 24/7.
           </p>
+          <div class="mt-8 flex flex-col sm:flex-row gap-4">
+            <a href={`tel:${BRAND.phone}`} class="btn-primary bg-white text-primary hover:bg-white/90 inline-flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              Call {BRAND.phoneFormatted}
+            </a>
+            <a href="/contact" class="btn-outline border-white text-white hover:bg-white/10 inline-flex items-center justify-center">
+              Request a Callback
+            </a>
+          </div>
         </div>
       </div>
     </div>
@@ -80,7 +101,7 @@ const breadcrumbSchema = getBreadcrumbSchema([
   <section class="section-padding">
     <div class="container-wide px-4">
       <!-- Breadcrumbs -->
-      <nav class="text-sm mb-6">
+      <nav class="text-sm mb-8">
         <a href="/" class="text-primary hover:underline">Home</a>
         <span class="mx-2 text-muted-foreground">/</span>
         <a href="/locations" class="text-primary hover:underline">Locations</a>
@@ -92,93 +113,186 @@ const breadcrumbSchema = getBreadcrumbSchema([
 
       <div class="grid lg:grid-cols-3 gap-12">
         <div class="lg:col-span-2">
-          <h2 class="text-2xl font-bold mb-4">
+          <!-- Main Introduction -->
+          <h2 class="text-2xl md:text-3xl font-bold mb-6">
             Professional {service.name} Services in {location.name}
           </h2>
 
-          <p class="text-muted-foreground mb-6 text-lg">
-            Looking for {service.name.toLowerCase()} in {location.name}? {BRAND.brandName} provides fast, reliable {service.name.toLowerCase()} services to homes and businesses throughout {location.name} and the surrounding areas of {location.countyOrRegion}.
-          </p>
+          {serviceContent ? (
+            <div class="prose prose-lg max-w-none mb-8">
+              <p class="text-lg text-muted-foreground leading-relaxed">
+                {serviceContent.intro}
+              </p>
+            </div>
+          ) : (
+            <p class="text-lg text-muted-foreground mb-8">
+              Looking for expert {service.name.toLowerCase()} in {location.name}? {BRAND.brandName} provides fast, reliable drainage services to homes and businesses throughout {location.name} and the surrounding areas of {location.countyOrRegion}.
+            </p>
+          )}
 
-          <p class="text-muted-foreground mb-6">
-            {service.description}
-          </p>
+          <!-- Service Description -->
+          <div class="bg-muted/30 p-6 rounded-xl mb-8">
+            <h3 class="text-xl font-bold mb-3">About Our {service.name} Service</h3>
+            <p class="text-muted-foreground">
+              {service.description}
+            </p>
+          </div>
+
+          <!-- Local Drainage Information -->
+          {locationData && (
+            <div class="mb-8">
+              <h3 class="text-xl font-bold mb-4">
+                Drainage in {location.name}
+              </h3>
+              <p class="text-muted-foreground mb-4">
+                {locationData.drainageInfo}
+              </p>
+              <p class="text-muted-foreground">
+                Our engineers are familiar with {locationData.propertyTypes} found throughout {location.name}, ensuring appropriate techniques for every situation.
+              </p>
+            </div>
+          )}
+
+          <!-- Common Problems Section -->
+          {serviceContent?.commonProblems && (
+            <div class="mb-8">
+              <h3 class="text-xl font-bold mb-4">
+                Common {service.name} Issues in {location.name}
+              </h3>
+              <ul class="grid sm:grid-cols-2 gap-3">
+                {serviceContent.commonProblems.map((problem) => (
+                  <li class="flex items-start gap-3 p-3 bg-muted/30 rounded-lg">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-accent shrink-0 mt-0.5"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>
+                    <span class="text-sm">{problem}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          )}
+
+          <!-- Our Process -->
+          {serviceContent?.process && (
+            <div class="mb-8">
+              <h3 class="text-xl font-bold mb-4">
+                How We Handle {service.name} in {location.name}
+              </h3>
+              <p class="text-muted-foreground">
+                {serviceContent.process}
+              </p>
+            </div>
+          )}
 
           <!-- Why Choose Us -->
-          <h3 class="text-xl font-bold mt-8 mb-4">
-            Why Choose {BRAND.brandName}?
-          </h3>
-          <ul class="space-y-3 mb-8">
-            {benefits.map((benefit) => (
-              <li class="flex items-start gap-3">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-trust shrink-0 mt-0.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22,4 12,14.01 9,11.01"></polyline></svg>
-                <span>{benefit}</span>
-              </li>
-            ))}
-          </ul>
+          <div class="mb-8">
+            <h3 class="text-xl font-bold mb-4">
+              Why Choose {BRAND.brandName} in {location.name}?
+            </h3>
+            <ul class="grid sm:grid-cols-2 gap-3">
+              {benefits.map((benefit) => (
+                <li class="flex items-start gap-3">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-trust shrink-0 mt-0.5"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22,4 12,14.01 9,11.01"></polyline></svg>
+                  <span>{benefit}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
 
-          <!-- Sub-services in this service+location -->
-          {service.subServices && service.subServices.length > 0 && (
-            <>
+          <!-- Local Tip -->
+          {serviceContent?.localTip && (
+            <div class="bg-primary/5 border-l-4 border-primary p-4 rounded-r-lg mb-8">
+              <p class="text-sm font-medium text-primary mb-1">Local Tip</p>
+              <p class="text-muted-foreground">{serviceContent.localTip}</p>
+            </div>
+          )}
+
+          <!-- Areas We Cover -->
+          {displayNeighborhoods.length > 0 && (
+            <div class="mb-8">
               <h3 class="text-xl font-bold mb-4">
-                {service.name} Services in {location.name}
+                Areas We Cover in {location.name}
               </h3>
-              <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-3 mb-8">
+              <p class="text-muted-foreground mb-4">
+                Our {service.name.toLowerCase()} service covers all areas of {location.name}, including:
+              </p>
+              <div class="flex flex-wrap gap-2 mb-4">
+                {displayNeighborhoods.map((area) => (
+                  <span class="px-3 py-1 bg-muted rounded-full text-sm">{area}</span>
+                ))}
+              </div>
+              {displayLandmarks.length > 0 && (
+                <p class="text-sm text-muted-foreground">
+                  We serve properties near {displayLandmarks.join(', ')}, and all surrounding neighbourhoods.
+                </p>
+              )}
+            </div>
+          )}
+
+          <!-- Sub-services -->
+          {service.subServices && service.subServices.length > 0 && (
+            <div class="mb-8">
+              <h3 class="text-xl font-bold mb-4">
+                Specialist {service.name} Services
+              </h3>
+              <div class="grid sm:grid-cols-2 gap-4">
                 {service.subServices.map((sub) => (
                   <a
                     href={`/services/${service.slug}/${sub.slug}`}
-                    class="p-4 bg-muted rounded-lg hover:bg-muted/70 transition-colors group"
+                    class="p-4 bg-card border border-border rounded-lg hover:border-primary transition-colors group"
                   >
-                    <span class="font-medium group-hover:text-primary transition-colors">
+                    <span class="font-semibold group-hover:text-primary transition-colors block mb-1">
                       {sub.name}
                     </span>
-                    <p class="text-sm text-muted-foreground mt-1">
-                      {sub.shortLabel || sub.description}
+                    <p class="text-sm text-muted-foreground">
+                      {sub.description}
                     </p>
                   </a>
                 ))}
               </div>
-            </>
+            </div>
           )}
 
-          <!-- Other services in this location -->
-          <h3 class="text-xl font-bold mb-4">
-            Other Services in {location.name}
-          </h3>
-          <div class="grid sm:grid-cols-3 gap-4 mb-8">
-            {otherServices.map((s) => (
-              <a
-                href={`/locations/${location.slug}/${s.slug}`}
-                class="p-4 bg-muted rounded-lg hover:bg-muted/70 transition-colors group"
-              >
-                <span class="text-2xl block mb-2">{s.icon}</span>
-                <span class="font-medium group-hover:text-primary transition-colors">
-                  {s.name}
-                </span>
-                <p class="text-sm text-muted-foreground mt-1">
-                  {s.shortLabel}
-                </p>
-              </a>
-            ))}
+          <!-- Other Services in Location -->
+          <div class="mb-8">
+            <h3 class="text-xl font-bold mb-4">
+              Other Drainage Services in {location.name}
+            </h3>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+              {otherServices.map((s) => (
+                <a
+                  href={`/locations/${location.slug}/${s.slug}`}
+                  class="p-4 bg-muted rounded-lg hover:bg-muted/70 transition-colors group"
+                >
+                  <span class="text-2xl block mb-2">{s.icon}</span>
+                  <span class="font-medium group-hover:text-primary transition-colors block">
+                    {s.name}
+                  </span>
+                  <p class="text-sm text-muted-foreground mt-1">
+                    {s.shortLabel}
+                  </p>
+                </a>
+              ))}
+            </div>
           </div>
 
-          <!-- Same service in nearby locations -->
-          <h3 class="text-xl font-bold mb-4">
-            {service.name} in Nearby Areas
-          </h3>
-          <div class="grid sm:grid-cols-3 gap-3 mb-8">
-            {nearbyLocations.map((l) => (
-              <a
-                href={`/locations/${l.slug}/${service.slug}`}
-                class="flex items-center gap-2 p-3 bg-muted rounded-lg hover:bg-muted/70 transition-colors"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
-                <span class="font-medium">{l.name}</span>
-              </a>
-            ))}
+          <!-- Same Service in Nearby Locations -->
+          <div class="mb-8">
+            <h3 class="text-xl font-bold mb-4">
+              {service.name} in Nearby Areas
+            </h3>
+            <div class="grid sm:grid-cols-2 lg:grid-cols-4 gap-3">
+              {nearbyLocations.map((l) => (
+                <a
+                  href={`/locations/${l.slug}/${service.slug}`}
+                  class="flex items-center gap-2 p-3 bg-muted rounded-lg hover:bg-muted/70 transition-colors"
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary shrink-0"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                  <span class="font-medium">{l.name}</span>
+                </a>
+              ))}
+            </div>
           </div>
 
-          <!-- Internal links -->
+          <!-- Internal Links -->
           <div class="pt-6 border-t border-border">
             <p class="text-sm text-muted-foreground">
               <a href="/" class="text-primary hover:underline">Home</a>
@@ -186,6 +300,8 @@ const breadcrumbSchema = getBreadcrumbSchema([
               <a href="/services" class="text-primary hover:underline">All Services</a>
               {" · "}
               <a href={`/services/${service.slug}`} class="text-primary hover:underline">{service.name}</a>
+              {" · "}
+              <a href="/locations" class="text-primary hover:underline">All Locations</a>
               {" · "}
               <a href={`/locations/${location.slug}`} class="text-primary hover:underline">{location.name}</a>
               {" · "}
@@ -197,18 +313,43 @@ const breadcrumbSchema = getBreadcrumbSchema([
         <!-- Sidebar -->
         <div>
           <div class="bg-card p-6 rounded-xl card-elevated sticky top-24">
-            <h3 class="text-xl font-bold mb-4">
+            <h3 class="text-xl font-bold mb-2">
               Get a Quote in {location.name}
             </h3>
-            <p class="text-muted-foreground mb-4">
-              Contact us for {service.name.toLowerCase()} services in {location.name}.
+            <p class="text-muted-foreground mb-4 text-sm">
+              Contact us for {service.name.toLowerCase()} services. Our local engineers respond {locationData?.responseTime || 'quickly'}.
             </p>
-            <a href={`tel:${BRAND.phone}`} class="btn-primary w-full text-center mb-3 block">
-              Call {BRAND.phoneFormatted}
+
+            <a href={`tel:${BRAND.phone}`} class="btn-primary w-full text-center mb-3 flex items-center justify-center gap-2">
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+              {BRAND.phoneFormatted}
             </a>
-            <a href="/contact" class="btn-outline w-full text-center block">
+
+            <a href="/contact" class="btn-outline w-full text-center block mb-6">
               Request a Callback
             </a>
+
+            <div class="border-t border-border pt-4">
+              <h4 class="font-semibold mb-3 text-sm">Why Call Us?</h4>
+              <ul class="space-y-2 text-sm">
+                <li class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-trust"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22,4 12,14.01 9,11.01"></polyline></svg>
+                  <span>No call-out fee</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-trust"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22,4 12,14.01 9,11.01"></polyline></svg>
+                  <span>Fixed pricing</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-trust"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22,4 12,14.01 9,11.01"></polyline></svg>
+                  <span>24/7 availability</span>
+                </li>
+                <li class="flex items-center gap-2">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-trust"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22,4 12,14.01 9,11.01"></polyline></svg>
+                  <span>Local {location.name} engineers</span>
+                </li>
+              </ul>
+            </div>
           </div>
         </div>
       </div>
@@ -218,15 +359,22 @@ const breadcrumbSchema = getBreadcrumbSchema([
   <!-- CTA Section -->
   <section class="section-padding bg-primary text-primary-foreground">
     <div class="container-wide px-4 text-center">
-      <h2 class="text-3xl font-bold mb-4">
+      <h2 class="text-3xl md:text-4xl font-bold mb-4">
         Need {service.name} in {location.name}?
       </h2>
-      <p class="text-xl text-primary-foreground/90 mb-8">
-        Our local team is ready to help. Call now for fast, professional service.
+      <p class="text-xl text-primary-foreground/90 mb-8 max-w-2xl mx-auto">
+        Our local team is ready to help with all your drainage needs.
+        Call now for fast, professional service across {location.name} and surrounding areas.
       </p>
-      <a href={`tel:${BRAND.phone}`} class="bg-white text-primary font-semibold px-8 py-4 rounded-lg shadow-lg hover:bg-white/90 transition-all text-lg inline-block">
-        Call {BRAND.phoneFormatted}
-      </a>
+      <div class="flex flex-col sm:flex-row gap-4 justify-center">
+        <a href={`tel:${BRAND.phone}`} class="bg-white text-primary font-semibold px-8 py-4 rounded-lg shadow-lg hover:bg-white/90 transition-all text-lg inline-flex items-center justify-center gap-2">
+          <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path></svg>
+          Call {BRAND.phoneFormatted}
+        </a>
+        <a href="/contact" class="bg-transparent border-2 border-white text-white font-semibold px-8 py-4 rounded-lg hover:bg-white/10 transition-all text-lg inline-block">
+          Get a Quote Online
+        </a>
+      </div>
     </div>
   </section>
 </BaseLayout>
