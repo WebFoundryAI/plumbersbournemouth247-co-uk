@@ -59,12 +59,12 @@ const googleMapsApiKey = import.meta.env.GOOGLE_MAPS_API_KEY;
     <div class="hero-overlay py-16 md:py-20">
       <div class="container-wide px-4">
         <a href="/locations" class="inline-flex items-center gap-2 text-white/90 hover:text-white mb-6 transition-colors">
-          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
+          <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="m12 19-7-7 7-7"></path><path d="M19 12H5"></path></svg>
           All Locations
         </a>
         <div class="text-white">
           <div class="flex items-center gap-2 mb-4">
-            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
             <span class="text-lg text-white/90">{location.countyOrRegion}</span>
           </div>
           <h1 class="text-4xl md:text-5xl font-bold mb-4">
@@ -122,7 +122,7 @@ const googleMapsApiKey = import.meta.env.GOOGLE_MAPS_API_KEY;
               <ul class="grid sm:grid-cols-2 gap-2">
                 {hubContent.landmarks.map((landmark) => (
                   <li class="flex items-start gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary mt-1 flex-shrink-0"><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"></polyline></svg>
+                    <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary mt-1 flex-shrink-0"><polyline points="12 3 20 7.5 20 16.5 12 21 4 16.5 4 7.5 12 3"></polyline></svg>
                     <span class="text-muted-foreground">{landmark}</span>
                   </li>
                 ))}
@@ -142,7 +142,7 @@ const googleMapsApiKey = import.meta.env.GOOGLE_MAPS_API_KEY;
 
           <!-- Services in this location -->
           <h3 class="text-xl font-bold mt-10 mb-4 flex items-center gap-2">
-            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
+            <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"></path></svg>
             Our Services in {location.name}
           </h3>
           <div class="grid sm:grid-cols-2 gap-3 mb-8">
@@ -212,7 +212,7 @@ const googleMapsApiKey = import.meta.env.GOOGLE_MAPS_API_KEY;
                 href={`/locations/${l.slug}/`}
                 class="flex items-center gap-2 p-3 bg-muted rounded-lg hover:bg-muted/70 transition-colors"
               >
-                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-primary"><path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"></path><circle cx="12" cy="10" r="3"></circle></svg>
                 <span class="font-medium">{l.name}</span>
               </a>
             ))}

@@ -1,6 +1,6 @@
 # SEO Verification Checklist
 
-**Last Updated:** 2025-12-31  
+**Last Updated:** 2026-02-13
 **Canonical Host:** https://manchesterblockeddrain.co.uk (non-www, HTTPS)
 
 ---

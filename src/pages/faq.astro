@@ -51,7 +51,7 @@ const combinedPageSchema = [breadcrumbSchema, faqSchema, webPageSchema];
             <details class="bg-card rounded-lg card-elevated group">
               <summary class="p-4 md:p-6 cursor-pointer font-semibold text-lg hover:text-primary transition-colors flex items-center justify-between">
                 {faq.question}
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shrink-0 ml-2 group-open:rotate-180 transition-transform"><path d="m6 9 6 6 6-6"></path></svg>
+                <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="shrink-0 ml-2 group-open:rotate-180 transition-transform"><path d="m6 9 6 6 6-6"></path></svg>
               </summary>
               <div class="px-4 md:px-6 pb-4 md:pb-6 text-muted-foreground">
                 {faq.answer}

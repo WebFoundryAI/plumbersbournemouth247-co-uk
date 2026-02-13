@@ -82,7 +82,7 @@ const combinedPageSchema = [breadcrumbSchema, webPageSchema];
                 <ul class="text-sm text-muted-foreground space-y-1">
                   {service.subServices.slice(0, 3).map((sub) => (
                     <li class="flex items-center gap-2">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-trust"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22,4 12,14.01 9,11.01"></polyline></svg>
+                      <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="text-trust"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22,4 12,14.01 9,11.01"></polyline></svg>
                       {sub.name}
                     </li>
                   ))}
@@ -92,7 +92,7 @@ const combinedPageSchema = [breadcrumbSchema, webPageSchema];
 
             <div class="mt-4 flex items-center gap-2 text-primary font-medium">
               Learn more
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
+              <svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"></path><path d="m12 5 7 7-7 7"></path></svg>
             </div>
           </a>
         ))}
