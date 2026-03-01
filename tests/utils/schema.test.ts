@@ -9,14 +9,11 @@ import {
   getBreadcrumbSchema,
   getFAQSchema,
   getBlogArticleSchema,
-  getReviewsSchema,
   getOrganizationSchema,
   getWebPageSchema,
   getWebSiteSchema,
   getCompleteHomepageSchema,
   serializeSchema,
-  getAggregateRatingData,
-  getCustomerReviews,
 } from '../../src/utils/schema';
 import { SERVICES } from '../../src/data/services';
 import { LOCATIONS } from '../../src/data/locations';
@@ -45,11 +42,8 @@ describe('Schema Generation', () => {
       expect(schema.telephone).toMatch(/^\+44\d+$/);
     });
 
-    it('includes aggregateRating with correct structure', () => {
-      expect(schema.aggregateRating).toBeDefined();
-      expect(schema.aggregateRating['@type']).toBe('AggregateRating');
-      expect(schema.aggregateRating.ratingValue).toBeDefined();
-      expect(schema.aggregateRating.reviewCount).toBeDefined();
+    it('does not include aggregateRating (removed — no verified source)', () => {
+      expect(schema.aggregateRating).toBeUndefined();
     });
 
     it('includes areaServed array matching LOCATIONS length', () => {
@@ -273,26 +267,6 @@ describe('Schema Generation', () => {
     });
   });
 
-  describe('getReviewsSchema', () => {
-    const reviews = getReviewsSchema();
-
-    it('returns array of 6 reviews', () => {
-      expect(reviews).toHaveLength(6);
-    });
-
-    it('each review has @type "Review"', () => {
-      for (const review of reviews) {
-        expect(review['@type']).toBe('Review');
-      }
-    });
-
-    it('each review references the business via @id', () => {
-      for (const review of reviews) {
-        expect(review.itemReviewed['@id']).toBe(`${siteUrl}/#business`);
-      }
-    });
-  });
-
   describe('getOrganizationSchema', () => {
     const schema = getOrganizationSchema();
 
@@ -384,16 +358,14 @@ describe('Schema Generation', () => {
   describe('getCompleteHomepageSchema', () => {
     const schemas = getCompleteHomepageSchema();
 
-    it('returns array containing business, organization, website, and review schemas', () => {
+    it('returns array containing business, organization, and website schemas', () => {
       expect(schemas[0]['@type']).toBe('Plumber');
       expect(schemas[1]['@type']).toBe('Organization');
       expect(schemas[2]['@type']).toBe('WebSite');
-      expect(schemas[3]['@type']).toBe('Review');
     });
 
-    it('total length is 3 + number of reviews', () => {
-      const reviewCount = getCustomerReviews().length;
-      expect(schemas).toHaveLength(3 + reviewCount);
+    it('total length is 3 (no reviews)', () => {
+      expect(schemas).toHaveLength(3);
     });
   });
 
@@ -419,26 +391,4 @@ describe('Schema Generation', () => {
     });
   });
 
-  describe('getAggregateRatingData', () => {
-    it('returns rating data with expected fields', () => {
-      const data = getAggregateRatingData();
-      expect(data.ratingValue).toBeDefined();
-      expect(data.reviewCount).toBeDefined();
-      expect(data.bestRating).toBeDefined();
-      expect(data.worstRating).toBeDefined();
-    });
-  });
-
-  describe('getCustomerReviews', () => {
-    it('returns array of review objects', () => {
-      const reviews = getCustomerReviews();
-      expect(reviews.length).toBeGreaterThan(0);
-      for (const review of reviews) {
-        expect(review.author).toBeTruthy();
-        expect(review.reviewBody).toBeTruthy();
-        expect(review.reviewRating).toBeGreaterThanOrEqual(1);
-        expect(review.reviewRating).toBeLessThanOrEqual(5);
-      }
-    });
-  });
 });
