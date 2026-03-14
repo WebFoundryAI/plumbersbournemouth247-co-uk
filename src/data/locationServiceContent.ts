@@ -647,3 +647,34 @@ export function interpolateLocationText(
 /**
  * Get resolved FAQs for a specific location and service combination
  */
+export function getLocationServiceFAQs(
+  locationSlug: string,
+  serviceSlug: string
+): Array<{ question: string; answer: string }> {
+  const locationData = LOCATION_DATA[locationSlug] || null;
+  const serviceContent = LOCATION_SERVICE_CONTENT[locationSlug]?.[serviceSlug] || null;
+  const templates = SERVICE_FAQ_TEMPLATES[serviceSlug];
+  if (!templates) return [];
+
+  const locationName = locationSlug.charAt(0).toUpperCase() + locationSlug.slice(1);
+  return templates.map(t => ({
+    question: interpolateLocationText(t.question, locationName, locationData, serviceContent),
+    answer: interpolateLocationText(t.answer, locationName, locationData, serviceContent)
+  }));
+}
+
+/**
+ * Get content for a specific location and service combination
+ */
+export function getLocationServiceContent(locationSlug: string, serviceSlug: string): ServiceContent | null {
+  const locationContent = LOCATION_SERVICE_CONTENT[locationSlug];
+  if (!locationContent) return null;
+  return locationContent[serviceSlug] || null;
+}
+
+/**
+ * Get location data
+ */
+export function getLocationData(locationSlug: string): LocationData | null {
+  return LOCATION_DATA[locationSlug] || null;
+}
