@@ -1,8 +1,8 @@
 export const BRAND = {
   brandName: "Plumbers Bournemouth 247",
   domain: "PlumbersBournemouth247.co.uk",
-  primaryLocation: "Manchester",
-  serviceAreaLabel: "Manchester and surrounding areas",
+  primaryLocation: "Bournemouth",
+  serviceAreaLabel: "Bournemouth and surrounding areas",
   phone: "01202555555",
   phoneFormatted: "01202 555555",
   email: "info@PlumbersBournemouth247.co.uk",
