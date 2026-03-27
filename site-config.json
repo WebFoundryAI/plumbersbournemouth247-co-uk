@@ -1,0 +1,14 @@
+{
+  "site_name": "Bournemouth Plumber",
+  "city": "Bournemouth",
+  "region": "Dorset",
+  "country": "England",
+  "tier": 2,
+  "domain": "plumbersbournemouth247.co.uk",
+  "layout_variant": "hero-cta",
+  "theme_variant": "trust-blue",
+  "status": "active",
+  "github_repo": "https://github.com/WebFoundryAI/plumbersbournemouth247-co-uk.git",
+  "source_folder": "rank-to-rent-sites/plumbersbournemouth247-co-uk",
+  "notes": "Tier 2 site. Migrated from existing rank-to-rent-sites folder."
+}
